@@ -2,9 +2,9 @@ name: K6 Performance Tests
 
 on:
   push:
-    branches: [ main, develop ]
+    branches: [ main ]
   pull_request:
-    branches: [ main, develop ]
+    branches: [ main ]
   schedule:
     - cron: '0 2 * * *' # Daily at 2 AM UTC
 
@@ -79,4 +79,4 @@ jobs:
           echo "- profile-report.html" >> $GITHUB_STEP_SUMMARY
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo " Download artifacts from this run for full details." >> $GITHUB_STEP_SUMMARY
+          echo "👉 Download artifacts from this run for full details." >> $GITHUB_STEP_SUMMARY
