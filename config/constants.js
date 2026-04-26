@@ -3,3 +3,8 @@ export const TEST_CONFIG = {
     duration: '20s',
     sleepTime:1
 };
+
+export const HEADERS = {
+        'Content-Type': 'application/json',
+
+};
