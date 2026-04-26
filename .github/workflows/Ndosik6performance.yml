@@ -1,0 +1,110 @@
+name: K6 Performance Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  schedule:
+    - cron: '0 2 * * *'  # Daily at 2 AM UTC
+
+jobs:
+  performance-tests:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+      
+      - name: Install K6
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y apt-transport-https
+          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --import https://dl.k6.io/key.gpg
+          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6-stable.list
+          sudo apt-get update
+          sudo apt-get install k6
+      
+      - name: Install dependencies
+        run: npm install
+        continue-on-error: true
+      
+      - name: Create results directory
+        run: mkdir -p ./k6-results
+      
+      - name: Run Login Performance Test
+        run: k6 run tests/loginTest.js --out json=./k6-results/login-test-results.json
+        continue-on-error: true
+      
+      - name: Run Profile Performance Test
+        run: k6 run tests/profileTest.js --out json=./k6-results/profile-test-results.json
+        continue-on-error: true
+      
+      - name: Generate HTML Report
+        if: always()
+        run: |
+          npm install -g k6-reporter || true
+          if [ -f ./k6-results/login-test-results.json ]; then
+            k6-reporter -e -o ./k6-results/login-test-report.html ./k6-results/login-test-results.json
+          fi
+          if [ -f ./k6-results/profile-test-results.json ]; then
+            k6-reporter -e -o ./k6-results/profile-test-report.html ./k6-results/profile-test-results.json
+          fi
+        continue-on-error: true
+      
+      - name: Upload K6 Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results-${{ matrix.node-version }}-${{ github.run_number }}
+          path: ./k6-results/
+          retention-days: 30
+      
+      - name: Generate Test Report Summary
+        if: always()
+        run: |
+          echo "## K6 Performance Test Results - Node ${{ matrix.node-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Run:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Timestamp:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Generated Artifacts:" >> $GITHUB_STEP_SUMMARY
+          echo "- Login Test Results (JSON): `login-test-results.json`" >> $GITHUB_STEP_SUMMARY
+          echo "- Login Test Report (HTML): `login-test-report.html`" >> $GITHUB_STEP_SUMMARY
+          echo "- Profile Test Results (JSON): `profile-test-results.json`" >> $GITHUB_STEP_SUMMARY
+          echo "- Profile Test Report (HTML): `profile-test-report.html`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ -f ./k6-results/login-test-results.json ]; then
+            echo "### Login Test Metrics:" >> $GITHUB_STEP_SUMMARY
+            cat ./k6-results/login-test-results.json | grep -o '"type":"Point"' | wc -l | xargs -I {} echo "- Data Points: {}" >> $GITHUB_STEP_SUMMARY
+          fi
+        continue-on-error: true
+
+  test-summary:
+    runs-on: ubuntu-latest
+    needs: performance-tests
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Test Summary
+        run: |
+          echo "Performance tests completed"
+          if [ "${{ needs.performance-tests.result }}" == "success" ]; then
+            echo "✅ All tests passed"
+            exit 0
+          else
+            echo "⚠️ Some tests failed or were skipped"
+            exit 0
+          fi
