@@ -6,14 +6,14 @@ on:
   pull_request:
     branches: [ main ]
   schedule:
-    - cron: '0 2 * * *' # Daily at 2 AM UTC
+    - cron: '0 2 * * *'
 
 jobs:
   performance-tests:
     runs-on: ubuntu-latest
 
     env:
-      BASE_URL: ${{ secrets.BASE_URL }} # optional if used in tests
+      BASE_URL: ${{ secrets.BASE_URL }}
 
     steps:
       - name: Checkout code
@@ -22,7 +22,7 @@ jobs:
       - name: Create results directory
         run: mkdir -p ./k6-results
 
-      # 🔥 Run Login Test (fails pipeline if thresholds fail)
+      # 🔥 Run Login Test
       - name: Run Login Performance Test
         uses: grafana/k6-action@v0.3.1
         with:
@@ -36,22 +36,16 @@ jobs:
           filename: tests/profileTest.js
           flags: --out json=./k6-results/profile-results.json
 
-      # 📊 Generate HTML reports (always runs)
+      # 📊 Generate HTML reports
       - name: Generate HTML Reports
         if: always()
         run: |
-          npm install -g k6-reporter || true
-
           if [ -f ./k6-results/login-results.json ]; then
-            k6-reporter \
-              --out ./k6-results/login-report.html \
-              ./k6-results/login-results.json
+            k6 run --out html=./k6-results/login-report.html tests/loginTest.js
           fi
 
           if [ -f ./k6-results/profile-results.json ]; then
-            k6-reporter \
-              --out ./k6-results/profile-report.html \
-              ./k6-results/profile-results.json
+            k6 run --out html=./k6-results/profile-report.html tests/profileTest.js
           fi
 
       # 📦 Upload artifacts
@@ -62,21 +56,3 @@ jobs:
           name: k6-results-${{ github.run_number }}
           path: ./k6-results/
           retention-days: 14
-
-      # 🧾 Summary in GitHub UI
-      - name: Generate Summary
-        if: always()
-        run: |
-          echo "## 🚀 K6 Performance Test Results" >> $GITHUB_STEP_SUMMARY
-          echo "**Run Number:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
-          echo "**Date:** $(date)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-
-          echo "### 📂 Artifacts" >> $GITHUB_STEP_SUMMARY
-          echo "- login-results.json" >> $GITHUB_STEP_SUMMARY
-          echo "- login-report.html" >> $GITHUB_STEP_SUMMARY
-          echo "- profile-results.json" >> $GITHUB_STEP_SUMMARY
-          echo "- profile-report.html" >> $GITHUB_STEP_SUMMARY
-
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "👉 Download artifacts from this run for full details." >> $GITHUB_STEP_SUMMARY
