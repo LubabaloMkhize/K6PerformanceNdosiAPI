@@ -13,38 +13,30 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      BASE_URL: ${{ secrets.BASE_URL }} # optional (use if your tests support env vars)
+      BASE_URL: ${{ secrets.BASE_URL }} # optional if used in tests
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Install k6 (simplified)
-      - name: Install k6
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y gnupg ca-certificates
-          sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C780D0BDB1A69C86
-          echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
-          sudo apt-get update
-          sudo apt-get install -y k6
-
       - name: Create results directory
         run: mkdir -p ./k6-results
 
-      # 🔥 Login Test (FAILS pipeline if thresholds fail)
+      # 🔥 Run Login Test (fails pipeline if thresholds fail)
       - name: Run Login Performance Test
-        run: |
-          k6 run tests/loginTest.js \
-            --out json=./k6-results/login-results.json
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/loginTest.js
+          flags: --out json=./k6-results/login-results.json
 
-      # 🔥 Profile Test
+      # 🔥 Run Profile Test
       - name: Run Profile Performance Test
-        run: |
-          k6 run tests/profileTest.js \
-            --out json=./k6-results/profile-results.json
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/profileTest.js
+          flags: --out json=./k6-results/profile-results.json
 
-      # Generate HTML reports (does NOT fail pipeline)
+      # 📊 Generate HTML reports (always runs)
       - name: Generate HTML Reports
         if: always()
         run: |
@@ -62,7 +54,7 @@ jobs:
               ./k6-results/profile-results.json
           fi
 
-      # Upload artifacts
+      # 📦 Upload artifacts
       - name: Upload K6 Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -71,7 +63,7 @@ jobs:
           path: ./k6-results/
           retention-days: 14
 
-      # Summary in GitHub UI
+      # 🧾 Summary in GitHub UI
       - name: Generate Summary
         if: always()
         run: |
@@ -87,4 +79,4 @@ jobs:
           echo "- profile-report.html" >> $GITHUB_STEP_SUMMARY
 
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Download artifacts from this run for full details." >> $GITHUB_STEP_SUMMARY
+          echo " Download artifacts from this run for full details." >> $GITHUB_STEP_SUMMARY
