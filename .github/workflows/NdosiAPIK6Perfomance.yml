@@ -37,16 +37,19 @@ jobs:
           flags: --out json=./k6-results/profile-results.json
 
       # 📊 Generate HTML reports
-      - name: Generate HTML Reports
+      - name: Generate Login HTML Report
         if: always()
-        run: |
-          if [ -f ./k6-results/login-results.json ]; then
-            k6 run --out html=./k6-results/login-report.html tests/loginTest.js
-          fi
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/loginTest.js
+          flags: --out html=./k6-results/login-report.html
 
-          if [ -f ./k6-results/profile-results.json ]; then
-            k6 run --out html=./k6-results/profile-report.html tests/profileTest.js
-          fi
+      - name: Generate Profile HTML Report
+        if: always()
+        uses: grafana/k6-action@v0.3.1
+        with:
+          filename: tests/profileTest.js
+          flags: --out html=./k6-results/profile-report.html
 
       # 📦 Upload artifacts
       - name: Upload K6 Results
