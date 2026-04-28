@@ -53,6 +53,18 @@ jobs:
             --out json=./k6-results/create-testimonial-results.json
             --out web-dashboard=./k6-results/create-testimonial-dashboard
 
+      # Update Testimonial test
+      - name: Run Update Testimonial Performance Test
+        uses: grafana/k6-action@v0.3.1
+        env:
+          K6_WEB_DASHBOARD_EXPORT: ./k6-results/update-testimonial-dashboard/index.html
+        with:
+          filename: tests/updateTestimonialTest.js
+          flags: >
+            --out json=./k6-results/update-testimonial-results.json
+            --out web-dashboard=./k6-results/update-testimonial-dashboard
+
+
       #  Upload all results
       - name: Upload K6 Results
         if: always()
