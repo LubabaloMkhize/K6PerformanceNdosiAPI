@@ -20,7 +20,7 @@ jobs:
       - name: Create results directory
         run: mkdir -p ./k6-results
 
-      # 🔥 Login test (JSON + Web Dashboard in ONE run)
+      #  Login test (JSON + Web Dashboard in ONE run)
       - name: Run Login Performance Test
         uses: grafana/k6-action@v0.3.1
         env:
@@ -32,7 +32,7 @@ jobs:
             --out web-dashboard=./k6-results/login-dashboard
 
 
-      # 🔥 Profile test (JSON + Web Dashboard in ONE run)
+      #  Profile test (JSON + Web Dashboard in ONE run)
       - name: Run Profile Performance Test
         uses: grafana/k6-action@v0.3.1
         env:
@@ -43,7 +43,7 @@ jobs:
             --out json=./k6-results/profile-results.json
             --out web-dashboard=./k6-results/profile-dashboard
 
-      # 📦 Upload all results
+      #  Upload all results
       - name: Upload K6 Results
         if: always()
         uses: actions/upload-artifact@v4
@@ -57,7 +57,7 @@ jobs:
         run: ls -R ./k6-results
 
 
-      # 🧾 GitHub Actions summary
+      #  GitHub Actions summary
       - name: Generate Summary
         if: always()
         run: |
