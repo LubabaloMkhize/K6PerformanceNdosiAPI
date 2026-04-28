@@ -4,7 +4,7 @@ export function validateCreateTestimonialResponse(response) {
     const body = response.json();
 
     const result = check(response, {
-        'status is 200': (r) => r.status === 200,
+        'status is 201': (r) => r.status === 201,
 
         'success is true': () => body.success === true,
 
