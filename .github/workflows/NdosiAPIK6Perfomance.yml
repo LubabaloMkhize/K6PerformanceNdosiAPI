@@ -1,0 +1,73 @@
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 2 * * *' # Daily at 02:00 UTC
+
+jobs:
+  performance-tests:
+    runs-on: ubuntu-latest
+
+    env:
+      BASE_URL: ${{ secrets.BASE_URL }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create results directory
+        run: mkdir -p ./k6-results
+
+      # 🔥 Login test (JSON + Web Dashboard in ONE run)
+      - name: Run Login Performance Test
+        uses: grafana/k6-action@v0.3.1
+        env:
+          K6_WEB_DASHBOARD_EXPORT: ./k6-results/login-dashboard/index.html
+        with:
+          filename: tests/loginTest.js
+          flags: >
+            --out json=./k6-results/login-results.json
+            --out web-dashboard
+
+
+      # 🔥 Profile test (JSON + Web Dashboard in ONE run)
+      - name: Run Profile Performance Test
+        uses: grafana/k6-action@v0.3.1
+        env:
+          K6_WEB_DASHBOARD_EXPORT: ./k6-results/profile-dashboard/index.html
+        with:
+          filename: tests/profileTest.js
+          flags: >
+            --out json=./k6-results/profile-results.json
+            --out web-dashboard=./k6-results/profile-dashboard
+
+      # 📦 Upload all results
+      - name: Upload K6 Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: k6-results-${{ github.run_number }}
+          path: ./k6-results/
+          retention-days: 14
+
+      # 🧾 GitHub Actions summary
+      - name: Generate Summary
+        if: always()
+        run: |
+          echo "## 🚀 K6 Performance Test Results" >> $GITHUB_STEP_SUMMARY
+          echo "**Run Number:** ${{ github.run_number }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### 📊 Interactive Reports" >> $GITHUB_STEP_SUMMARY
+          echo "- login-dashboard/index.html" >> $GITHUB_STEP_SUMMARY
+          echo "- profile-dashboard/index.html" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+          echo "### 📂 Raw Data" >> $GITHUB_STEP_SUMMARY
+          echo "- login-results.json" >> $GITHUB_STEP_SUMMARY
+          echo "- profile-results.json" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⬇️ Download the artifact and open index.html locally to view reports." >> $GITHUB_STEP_SUMMARY
