@@ -10,8 +10,8 @@ export const PAYLOADS = {
         "isPublic": true
     },
     updateTestimonial: {
-        "title": "From Beginner to Confident QA Professional - Updated",
-        "content": "The Ndosi Automation bootcamp gave me a solid foundation in software testing, both manual and automated. The hands-on projects and real-world scenarios helped me understand how QA works in an actual development environment. I now feel confident writing test cases, identifying defects, and collaborating with developers using Agile practices.",
+        "title": "Updated QA Bootcamp Testimonial",
+        "content": "This testimonial has been updated via automated API testing.",
         "rating": 4
     }
 
