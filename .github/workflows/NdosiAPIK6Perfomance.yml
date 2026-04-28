@@ -29,7 +29,7 @@ jobs:
           filename: tests/loginTest.js
           flags: >
             --out json=./k6-results/login-results.json
-            --out web-dashboard
+            --out web-dashboard=./k6-results/login-dashboard
 
 
       # 🔥 Profile test (JSON + Web Dashboard in ONE run)
@@ -51,6 +51,11 @@ jobs:
           name: k6-results-${{ github.run_number }}
           path: ./k6-results/
           retention-days: 14
+
+      - name: List k6-results contents
+        if: always()
+        run: ls -R ./k6-results
+
 
       # 🧾 GitHub Actions summary
       - name: Generate Summary
