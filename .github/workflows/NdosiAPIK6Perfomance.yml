@@ -64,6 +64,16 @@ jobs:
             --out json=./k6-results/update-testimonial-results.json
             --out web-dashboard=./k6-results/update-testimonial-dashboard
 
+      # Delete Testimonial test
+      - name: Run Delete Testimonial Performance Test
+        uses: grafana/k6-action@v0.3.1
+        env:
+          K6_WEB_DASHBOARD_EXPORT: ./k6-results/delete-testimonial-dashboard/index.html
+        with:
+          filename: tests/deleteTestimonialTest.js
+          flags: >
+            --out json=./k6-results/delete-testimonial-results.json
+            --out web-dashboard=./k6-results/delete-testimonial-dashboard
 
       #  Upload all results
       - name: Upload K6 Results
