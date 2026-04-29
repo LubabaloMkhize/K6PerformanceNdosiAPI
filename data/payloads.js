@@ -1,7 +1,7 @@
 export const PAYLOADS = {
     login: {
-        "email":"Tatalo.Mkhize@example.com",
-        "password":"England@123456"
+        "email":"admin@gmail.com",
+        "password":"@12345678"
     },
     createTestimonial: {
         "title": "From Beginner to Confident QA Professional",
