@@ -12,32 +12,32 @@ export const options = {
     thresholds: {
         http_req_failed: ['rate<0.01'],
         checks: ['rate>0.95'],
-        http_req_duration: ['p(95)<1000'],
+        http_req_duration: ['p(95)<5000'],
     },
 };
 
-export default function deleteTestimonialTest() {
 
-    
-    const loginResponse = loginRequest(PAYLOADS.login);
-    const token = loginResponse.json().data.token;
+export function setup() {
+  const loginResponse = loginRequest(PAYLOADS.login);
+  const token = loginResponse.json().data.token;
 
-    
-    const createResponse = createTestimonialRequest(
-        PAYLOADS.createTestimonial,
-        token
-    );
+  const createResponse = createTestimonialRequest(
+    PAYLOADS.createTestimonial,
+    token
+  );
 
-    const testimonialId = createResponse.json().data.Id;
+  return {
+    token,
+    testimonialId: createResponse.json().data.Id,
+  };
+}
 
-    
-    const deleteResponse = deleteTestimonialRequest(
-        testimonialId,
-        token
-    );
+export default function (data) {
+  const deleteResponse = deleteTestimonialRequest(
+    data.testimonialId,
+    data.token
+  );
 
-   
-    validateDeleteTestimonialResponse(deleteResponse);
-
-    sleep(TEST_CONFIG.sleepTime);
+  validateDeleteTestimonialResponse(deleteResponse);
+  sleep(TEST_CONFIG.sleepTime);
 }

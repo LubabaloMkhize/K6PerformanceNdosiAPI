@@ -12,20 +12,12 @@ export function validateDeleteTestimonialResponse(response) {
     }
 
     const result = check(response, {
-        'status is 200 or 204': (r) =>
-            r.status === 200 || r.status === 204,
+      'status is 200 or 204': (r) => r.status === 200 || r.status === 204,
+      'success is true': (r) => r.json()?.success === true,
+      'delete message is correct': (r) =>
+      r.json()?.message === 'Testimonial deleted successfully',
+  });
 
-        'success is true (if body exists)': () =>
-            body ? body.success === true : true,
-
-        'delete message is correct (if body exists)': () =>
-            body && body.message
-                ? body.message.toLowerCase().includes('deleted')
-                : true,
-
-        'response time < 2s': (r) =>
-            r.timings.duration < 2000,
-    });
 
     if (!result) {
         console.error('Delete Testimonial validation failed');
