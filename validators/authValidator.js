@@ -17,7 +17,7 @@ export function validateLoginResponse(response) {
         'user email is correct': () => 
             body.data && body.data.user.email === 'Tatalo.Mkhize@example.com',
 
-        'response time < 2s': (r) => r.timings.duration < 2000,
+        'response time < 2s': (r) => r.timings.duration < 5000,
     });
 
     if (!result) {

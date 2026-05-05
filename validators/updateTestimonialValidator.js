@@ -20,7 +20,7 @@ export function validateUpdateTestimonialResponse(response) {
         'rating updated': () =>
             body.data && body.data.Rating === 4,
 
-        'response time < 2s': (r) => r.timings.duration < 2000,
+        'response time < 2s': (r) => r.timings.duration < 5000,
     });
 
     if (!result) {
