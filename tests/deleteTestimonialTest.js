@@ -16,28 +16,28 @@ export const options = {
     },
 };
 
+export default function deleteTestimonialTest() {
 
-export function setup() {
-  const loginResponse = loginRequest(PAYLOADS.login);
-  const token = loginResponse.json().data.token;
+    
+    const loginResponse = loginRequest(PAYLOADS.login);
+    const token = loginResponse.json().data.token;
 
-  const createResponse = createTestimonialRequest(
-    PAYLOADS.createTestimonial,
-    token
-  );
+    
+    const createResponse = createTestimonialRequest(
+        PAYLOADS.createTestimonial,
+        token
+    );
 
-  return {
-    token,
-    testimonialId: createResponse.json().data.Id,
-  };
-}
+    const testimonialId = createResponse.json().data.Id;
 
-export default function (data) {
-  const deleteResponse = deleteTestimonialRequest(
-    data.testimonialId,
-    data.token
-  );
+    
+    const deleteResponse = deleteTestimonialRequest(
+        testimonialId,
+        token
+    );
 
-  validateDeleteTestimonialResponse(deleteResponse);
-  sleep(TEST_CONFIG.sleepTime);
+   
+    validateDeleteTestimonialResponse(deleteResponse);
+
+    sleep(TEST_CONFIG.sleepTime);
 }
