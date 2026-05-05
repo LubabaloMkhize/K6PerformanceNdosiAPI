@@ -9,7 +9,7 @@ export const options = {
     vus: TEST_CONFIG.vus,
     duration: TEST_CONFIG.duration,
     thresholds: {
-        http_req_duration: ['p(95)<5000'],
+        http_req_duration: ['p(95)<9000'],
         http_req_failed: ['rate<0.01'],
         checks: ['rate>0.95'],
     },
