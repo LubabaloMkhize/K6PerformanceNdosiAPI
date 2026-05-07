@@ -4,6 +4,7 @@ import { validateCreateTestimonialResponse } from '../validators/createTestimoni
 import { TEST_CONFIG } from '../config/constants.js';
 import { PAYLOADS } from '../data/payloads.js';
 import { sleep } from 'k6';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
 export const options = {
     vus: TEST_CONFIG.vus,
@@ -28,3 +29,9 @@ export default function createTestimonialTest(){
 
     sleep(TEST_CONFIG.sleepTime);
 };
+
+export function handleSummary(data) {
+  return {
+    "reports/CreateTestimonialreport.html": htmlReport(data),
+  };
+}

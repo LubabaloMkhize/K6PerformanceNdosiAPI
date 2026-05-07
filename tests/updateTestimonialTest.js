@@ -5,6 +5,7 @@ import { updateTestimonialRequest } from '../requests/updateTestimonialRequest.j
 import { validateUpdateTestimonialResponse } from '../validators/updateTestimonialValidator.js';
 import { TEST_CONFIG } from '../config/constants.js';
 import { PAYLOADS } from '../data/payloads.js';
+import { htmlReport } from "https://raw.githubusercontent.com/benc-uk/k6-reporter/main/dist/bundle.js";
 
 export const options = {
     vus: TEST_CONFIG.vus,
@@ -41,4 +42,9 @@ export default function updateTestimonialTest() {
     validateUpdateTestimonialResponse(updateResponse);
 
     sleep(TEST_CONFIG.sleepTime);
+}
+export function handleSummary(data) {
+  return {
+    "reports/UpdateTestimonialreport.html": htmlReport(data),
+  };
 }
