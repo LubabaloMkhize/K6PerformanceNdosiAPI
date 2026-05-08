@@ -217,9 +217,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: k6-results-${{ github.run_number }}
-          path: |
-            ./k6-results/
-            ./reports/
+          path: ./k6-results/
           retention-days: 14
 
       - name: List k6-results contents
@@ -241,18 +239,15 @@ jobs:
           echo "- login-dashboard/index.html" >> $GITHUB_STEP_SUMMARY
           echo "- profile-dashboard/index.html" >> $GITHUB_STEP_SUMMARY
           echo "- create-testimonial-dashboard/index.html" >> $GITHUB_STEP_SUMMARY
-          echo "- create-testimonial-results.json" >> $GITHUB_STEP_SUMMARY
+          echo "- update-testimonial-dashboard/index.html" >> $GITHUB_STEP_SUMMARY
+          echo "- delete-testimonial-dashboard/index.html" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
 
           echo "### 📂 Raw Data" >> $GITHUB_STEP_SUMMARY
           echo "- login-results.json" >> $GITHUB_STEP_SUMMARY
           echo "- profile-results.json" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📄 HTML Reports" >> $GITHUB_STEP_SUMMARY
-          echo "- reports/Loginreport.html" >> $GITHUB_STEP_SUMMARY
-          echo "- reports/Profilereport.html" >> $GITHUB_STEP_SUMMARY
-          echo "- reports/CreateTestimonialreport.html" >> $GITHUB_STEP_SUMMARY
-          echo "- reports/UpdateTestimonialreport.html" >> $GITHUB_STEP_SUMMARY
-          echo "- reports/DeleteTestimonialreport.html" >> $GITHUB_STEP_SUMMARY
+          echo "- create-testimonial-results.json" >> $GITHUB_STEP_SUMMARY
+          echo "- update-testimonial-results.json" >> $GITHUB_STEP_SUMMARY
+          echo "- delete-testimonial-results.json" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "⬇️ Download the artifact and open the HTML report files locally to view details." >> $GITHUB_STEP_SUMMARY
