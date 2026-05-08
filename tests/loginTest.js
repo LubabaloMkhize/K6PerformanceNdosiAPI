@@ -25,6 +25,6 @@ export default function loginTest(){
 
 export function handleSummary(data) {
   return {
-    "reports/Loginreport.html": htmlReport(data),
+    "k6-results/Login-report.html": htmlReport(data),
   };
 }

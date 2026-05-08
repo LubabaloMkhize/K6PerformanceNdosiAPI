@@ -45,6 +45,6 @@ export default function updateTestimonialTest() {
 }
 export function handleSummary(data) {
   return {
-    "reports/UpdateTestimonialreport.html": htmlReport(data),
+    "k6-results/UpdateTestimonial-report.html": htmlReport(data),
   };
 }

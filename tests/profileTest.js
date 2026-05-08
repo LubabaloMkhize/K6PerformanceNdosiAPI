@@ -31,6 +31,6 @@ export default function(){
 
 export function handleSummary(data) {
   return {
-    "reports/Profilereport.html": htmlReport(data),
+    "k6-results/Profile-report.html": htmlReport(data),
   };
 }

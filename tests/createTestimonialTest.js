@@ -32,6 +32,6 @@ export default function createTestimonialTest(){
 
 export function handleSummary(data) {
   return {
-    "reports/CreateTestimonialreport.html": htmlReport(data),
+    "k6-results/CreateTestimonial-report.html": htmlReport(data),
   };
 }
