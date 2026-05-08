@@ -211,18 +211,22 @@ jobs:
           </html>
           EOF
 
-      #  Upload all results
+      #  Upload all results and generated HTML reports
       - name: Upload K6 Results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: k6-results-${{ github.run_number }}
-          path: ./k6-results/
+          path: |
+            ./k6-results/
+            ./reports/
           retention-days: 14
 
       - name: List k6-results contents
         if: always()
-        run: ls -R ./k6-results
+        run: |
+          ls -R ./k6-results
+          ls -R ./reports
 
 
       #  GitHub Actions summary
@@ -245,4 +249,11 @@ jobs:
           echo "- login-results.json" >> $GITHUB_STEP_SUMMARY
           echo "- profile-results.json" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "⬇️ Download the artifact and open index.html locally to view reports." >> $GITHUB_STEP_SUMMARY
+          echo "### 📄 HTML Reports" >> $GITHUB_STEP_SUMMARY
+          echo "- reports/Loginreport.html" >> $GITHUB_STEP_SUMMARY
+          echo "- reports/Profilereport.html" >> $GITHUB_STEP_SUMMARY
+          echo "- reports/CreateTestimonialreport.html" >> $GITHUB_STEP_SUMMARY
+          echo "- reports/UpdateTestimonialreport.html" >> $GITHUB_STEP_SUMMARY
+          echo "- reports/DeleteTestimonialreport.html" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "⬇️ Download the artifact and open the HTML report files locally to view details." >> $GITHUB_STEP_SUMMARY
