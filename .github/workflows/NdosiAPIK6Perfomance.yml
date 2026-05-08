@@ -170,7 +170,7 @@ jobs:
                           <h2>🔐 Login Test</h2>
                           <div class="button-group">
                               <a href="login-dashboard/index.html" class="button">View Dashboard</a>
-                              <a href="login-report.html" class="button">View HTML Report</a>
+                              <a href="Login-report.html" class="button">View HTML Report</a>
                               <a href="login-results.json" class="button json">View JSON</a>
                           </div>
                       </div>

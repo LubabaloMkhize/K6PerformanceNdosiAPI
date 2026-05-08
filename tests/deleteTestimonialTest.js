@@ -44,6 +44,6 @@ export default function deleteTestimonialTest() {
 }
 export function handleSummary(data) {
   return {
-    "k6-results/DeleteTestimonialreport.html": htmlReport(data),
+    "k6-results/DeleteTestimonial-report.html": htmlReport(data),
   };
 }
