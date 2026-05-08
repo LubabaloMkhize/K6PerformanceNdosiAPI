@@ -226,7 +226,6 @@ jobs:
         if: always()
         run: |
           ls -R ./k6-results
-          ls -R ./reports
 
 
       #  GitHub Actions summary
