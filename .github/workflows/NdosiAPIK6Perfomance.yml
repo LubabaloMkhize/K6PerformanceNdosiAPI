@@ -170,6 +170,7 @@ jobs:
                           <h2>🔐 Login Test</h2>
                           <div class="button-group">
                               <a href="login-dashboard/index.html" class="button">View Dashboard</a>
+                              <a href="login-report.html" class="button">View HTML Report</a>
                               <a href="login-results.json" class="button json">View JSON</a>
                           </div>
                       </div>
@@ -178,6 +179,7 @@ jobs:
                           <h2>👤 Profile Test</h2>
                           <div class="button-group">
                               <a href="profile-dashboard/index.html" class="button">View Dashboard</a>
+                              <a href="Profile-report.html" class="button">View HTML Report</a>
                               <a href="profile-results.json" class="button json">View JSON</a>
                           </div>
                       </div>
@@ -186,6 +188,7 @@ jobs:
                           <h2>✏️ Create Testimonial</h2>
                           <div class="button-group">
                               <a href="create-testimonial-dashboard/index.html" class="button">View Dashboard</a>
+                              <a href="CreateTestimonial-report.html" class="button">View HTML Report</a>
                               <a href="create-testimonial-results.json" class="button json">View JSON</a>
                           </div>
                       </div>
@@ -194,6 +197,7 @@ jobs:
                           <h2>📝 Update Testimonial</h2>
                           <div class="button-group">
                               <a href="update-testimonial-dashboard/index.html" class="button">View Dashboard</a>
+                              <a href="UpdateTestimonial-report.html" class="button">View HTML Report</a>
                               <a href="update-testimonial-results.json" class="button json">View JSON</a>
                           </div>
                       </div>
@@ -202,6 +206,7 @@ jobs:
                           <h2>🗑️ Delete Testimonial</h2>
                           <div class="button-group">
                               <a href="delete-testimonial-dashboard/index.html" class="button">View Dashboard</a>
+                              <a href="DeleteTestimonial-report.html" class="button">View HTML Report</a>
                               <a href="delete-testimonial-results.json" class="button json">View JSON</a>
                           </div>
                       </div>
