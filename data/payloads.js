@@ -10,8 +10,8 @@ export const PAYLOADS = {
         "isPublic": true
     },
     updateTestimonial: {
-        "title": "Updated QA Bootcamp Testimonial",
-        "content": "This testimonial has been updated via automated API testing.",
+        "title": "Updated QA New ERA Bootcamp Testimonial",
+        "content": "This testimonial has been updated via automated API testing with New Era.",
         "rating": 4
     }
 
