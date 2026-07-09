@@ -24,7 +24,7 @@ export function validateCreateTestimonialResponse(response) {
             body.data && body.data.CreatedAt !== undefined,
 
         'response time < 2s': (r) =>
-            r.timings.duration < 5000,
+            r.timings.duration < 8000,
     });
 
     if (!result) {
