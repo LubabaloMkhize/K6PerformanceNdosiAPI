@@ -12,7 +12,7 @@ export function validateLoginResponse(response) {
         'token exists': () => !!body?.data?.token,
         'user email is correct': () =>
             body?.data?.user?.email?.toLowerCase() ===
-            'tatalo.mkhize@example.com'.toLowerCase(),
+            'tatalo@example.com'.toLowerCase(),
     });
 
     if (!result) {
